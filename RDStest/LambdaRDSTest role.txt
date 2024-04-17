@@ -1,0 +1,74 @@
+LambdaRDSTestRole
+
+AllowInvoke
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "lambda:InvokeFunction",
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+    ]
+}
+
+AllowSM
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/Event": "${aws:PrincipalTag/Event}",
+                    "aws:ResourceTag/Workshop": "${aws:PrincipalTag/Workshop}"
+                }
+            },
+            "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+    ]
+}
+
+AWSLambdaBasicExecutionRole
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+AWSLambdaVPCAccessExecutionRole
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AWSLambdaVPCAccessExecutionPermissions",
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DeleteNetworkInterface",
+                "ec2:AssignPrivateIpAddresses",
+                "ec2:UnassignPrivateIpAddresses"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
